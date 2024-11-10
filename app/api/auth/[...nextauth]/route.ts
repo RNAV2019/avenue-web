@@ -14,20 +14,20 @@ const authOptions: AuthOptions = {
 				try {
 					const sql = neon(process.env.DATABASE_URL ?? '');
 					const users =
-						await sql`SELECT id, email, password FROM users WHERE email = ${email} LIMIT 1`;
+						await sql`SELECT id, name, profile_image, password FROM users WHERE email = ${email} LIMIT 1`;
 					const user = users[0];
 					if (!user || !credentials) {
 						return null;
 					}
-					console.log(user.password);
 					const passwordsMatch = await compare(password, user.password);
 					if (!passwordsMatch) {
 						return null;
 					}
 					return {
 						id: user.id,
-						email: user.email,
-						name: user.name
+						email: email,
+						name: user.name,
+						image: user.profile_image
 					};
 				} catch (error) {
 					console.log('Authentication error:', error);
@@ -38,6 +38,27 @@ const authOptions: AuthOptions = {
 	],
 	session: {
 		strategy: 'jwt'
+	},
+	callbacks: {
+		async jwt({ token, user, trigger, session }) {
+			if (trigger === 'update') {
+				return {
+					name: token.name,
+					email: token.email,
+					sub: token.sub,
+					picture: session.user.image
+				};
+			}
+			return { ...token, ...user };
+		},
+		async session({ session, token }) {
+			if (session.user) {
+				session.user.email = token.email;
+				session.user.image = token.picture;
+				session.user.name = token.name;
+			}
+			return session;
+		}
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 	pages: {

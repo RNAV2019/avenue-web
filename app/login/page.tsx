@@ -14,8 +14,6 @@ export default function GET() {
 		event.preventDefault();
 
 		try {
-			console.log(email);
-			console.log(password);
 			const res = await signIn('credentials', {
 				email,
 				password,

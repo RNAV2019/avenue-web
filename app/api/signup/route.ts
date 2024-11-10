@@ -4,9 +4,6 @@ import { hash, genSalt } from 'bcryptjs';
 
 export async function POST(req: Request) {
 	const form = await req.formData();
-	console.log(form.get('name'));
-	console.log(form.get('email'));
-	console.log(form.get('password'));
 	const email = form.get('email');
 	if (!email) {
 		return new Response(JSON.stringify({ success: false }), {
