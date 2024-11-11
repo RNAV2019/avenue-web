@@ -2,11 +2,17 @@
 import Button from '@/components/Button';
 import ProfileIconModal from '@/components/ProfileIconModal';
 import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+type avenueID = {
+	avenueID: string;
+};
 
 export default function Dashboard() {
 	const { data: session, update, status } = useSession();
 	const user = session?.user;
+	const router = useRouter();
 	const [profileModalOpen, setProfileModalOpen] = useState(false);
 	const handleOpenProfileModal = () => setProfileModalOpen(true);
 	const handleCloseProfileModal = () => setProfileModalOpen(false);
@@ -20,6 +26,20 @@ export default function Dashboard() {
 			}
 		});
 	};
+	const handleVisitingAvenue = async () => {
+		const res = await fetch('/api/visitAvenue', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const data: avenueID = await res.json();
+		if (data.avenueID) {
+			router.push(`/avenue/${data.avenueID}`);
+		}
+		console.log(data.avenueID);
+	};
+
 	console.log(user);
 
 	return (
@@ -31,14 +51,6 @@ export default function Dashboard() {
 			)}
 			{status == 'authenticated' && (
 				<>
-					<ProfileIconModal
-						isOpen={profileModalOpen}
-						onClose={handleCloseProfileModal}
-						onUpdateUserImage={handleUpdateUserImage}
-						name={user?.name}
-						email={user?.email}
-						defaultImage={user?.image}
-					/>
 					<nav className="flex flex-row items-center justify-between gap-3">
 						<div className="flex flex-row items-center gap-1 text-xl font-bold">
 							<h1>Avenue</h1>
@@ -75,7 +87,7 @@ export default function Dashboard() {
 								<Button className="h-12 w-44" colour="bg-teal-500">
 									Edit Description
 								</Button>
-								<Button className="h-12 w-44" colour="bg-indigo-500">
+								<Button className="h-12 w-44" colour="bg-indigo-500" onClick={handleVisitingAvenue}>
 									Visit my avenue
 								</Button>
 							</div>
@@ -106,6 +118,14 @@ export default function Dashboard() {
 							</article>
 						</section>
 					</div>
+					<ProfileIconModal
+						isOpen={profileModalOpen}
+						onClose={handleCloseProfileModal}
+						onUpdateUserImage={handleUpdateUserImage}
+						name={user?.name}
+						email={user?.email}
+						defaultImage={user?.image}
+					/>
 				</>
 			)}
 		</main>

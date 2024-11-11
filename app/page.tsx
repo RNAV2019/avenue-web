@@ -1,29 +1,29 @@
 'use client';
 import Button from '@/components/Button';
-import { useSession } from 'next-auth/react';
+import { Outfit } from 'next/font/google';
 
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 export default function Home() {
-	const session = useSession();
-
 	return (
-		<main className="space-y-10 p-10">
-			<nav className="flex flex-row items-center justify-between gap-3">
-				<div className="flex flex-row items-center gap-1 text-xl font-bold">
-					<h1>Avenue</h1>
-				</div>
+		<>
+			<nav className="flex flex-row items-center justify-between gap-3 p-14">
+				<a href="/" className="self-start">
+					<h1 className={`text-2xl font-bold text-slate-900 ${outfit.className}`}>Avenue</h1>
+				</a>
 				<div className="flex flex-row items-center justify-center gap-8">
 					<a href="/login">
 						<Button className="h-12 w-44" colour="bg-red-500">
 							Login
 						</Button>
 					</a>
-					<a href="/signup">
+					<a href="/register">
 						<Button className="h-12 w-44" colour="bg-red-500">
-							Sign up
+							Register
 						</Button>
 					</a>
 				</div>
 			</nav>
-		</main>
+			<main className="p-14"></main>
+		</>
 	);
 }

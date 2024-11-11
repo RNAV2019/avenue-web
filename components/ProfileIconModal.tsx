@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Button from './Button';
 import { ImageValidity } from '@/lib/helper';
+import Input from './Input';
 
 interface ProfileIconModalProps {
 	isOpen: boolean;
@@ -25,12 +26,6 @@ export default function ProfileIconModal({
 	const [isValidImage, setIsValidImage] = useState(false);
 
 	const validateImageURL = async () => {
-		// const res = await fetch(imageURL, { mode: 'no-cors' });
-		// if (res.ok) {
-		// 	setIsValidImage(true);
-		// } else {
-		// 	setIsValidImage(false);
-		// }
 		try {
 			const res = await fetch('/api/validateImage', {
 				method: 'POST',
@@ -80,7 +75,10 @@ export default function ProfileIconModal({
 		}
 	}, [imageURL]);
 	return (
-		<div className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-80" onClick={onClose}>
+		<div
+			className="fixed -top-10 left-0 z-50 h-full w-full bg-black bg-opacity-80"
+			onClick={onClose}
+		>
 			<div
 				className="dark:bg-secondary shadow-brutal mx-auto my-52 max-w-lg rounded-lg bg-cyan-500"
 				onClick={(e) => e.stopPropagation()}
@@ -110,13 +108,12 @@ export default function ProfileIconModal({
 							{name?.charAt(0)}
 						</div>
 					)}
-					<input
+					<Input
 						type="text"
 						id="name"
 						name="name"
 						placeholder="URL"
 						autoComplete="off"
-						className="shadow-brutal w-2/3 rounded-sm border-2 border-black p-2 px-3 text-sm outline-none placeholder:text-black"
 						onChange={(e) => setImageURL(e.target.value)}
 					/>
 					<div className="flex flex-row gap-8">
