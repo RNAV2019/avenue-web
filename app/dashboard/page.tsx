@@ -3,17 +3,33 @@ import Button from '@/components/Button';
 import ProfileIconModal from '@/components/ProfileIconModal';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type avenueID = {
 	avenueID: string;
+};
+
+type DashboardInfo = {
+	aggregateClicks: number;
+	linksRes: number;
 };
 
 export default function Dashboard() {
 	const { data: session, update, status } = useSession();
 	const user = session?.user;
 	const router = useRouter();
+	const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
+	const [loading, setLoading] = useState(true);
 	const [profileModalOpen, setProfileModalOpen] = useState(false);
+	useEffect(() => {
+		fetch('/api/getDashboard')
+			.then((res) => res.json())
+			.then((data: DashboardInfo) => {
+				setDashboardInfo(data);
+				setLoading(false);
+			});
+	}, []);
+
 	const handleOpenProfileModal = () => setProfileModalOpen(true);
 	const handleCloseProfileModal = () => setProfileModalOpen(false);
 	const handleUpdateUserImage = (imageURL: string) => {
@@ -35,6 +51,7 @@ export default function Dashboard() {
 		});
 		const data: avenueID = await res.json();
 		if (data.avenueID) {
+			router.prefetch(`/avenue/${data.avenueID}`);
 			router.push(`/avenue/${data.avenueID}`);
 		}
 		console.log(data.avenueID);
@@ -80,7 +97,7 @@ export default function Dashboard() {
 							</Button>
 						</div>
 					</nav>
-					<div className="shadow-brutal grainy flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-6">
+					<div className="grainy flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-6 shadow-brutal">
 						<div className="flex flex-row items-center justify-between">
 							<h1 className="ml-2 text-xl font-medium">Dashboard</h1>
 							<div className="flex gap-3">
@@ -93,27 +110,31 @@ export default function Dashboard() {
 							</div>
 						</div>
 						<section className="flex flex-row justify-between gap-3">
-							<article className="shadow-brutal grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 sm:justify-between">
+							<article className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 shadow-brutal sm:justify-between">
 								<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
 
 								<div>
-									<p className="text-3xl font-bold text-gray-900">9</p>
+									<p className="text-3xl font-bold text-gray-900">
+										{loading ? 'Loading' : dashboardInfo?.aggregateClicks}
+									</p>
 
 									<p className="text-sm font-medium">Total Avenue Clicks</p>
 								</div>
 							</article>
-							<article className="shadow-brutal grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 sm:justify-between">
+							<article className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 shadow-brutal sm:justify-between">
 								<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
 
 								<div>
-									<p className="text-3xl font-bold text-gray-900">3</p>
+									<p className="text-3xl font-bold text-gray-900">
+										{loading ? 'Loading' : dashboardInfo?.linksRes}
+									</p>
 
 									<p className="text-sm font-medium">Number of links</p>
 								</div>
 							</article>
 						</section>
 						<section>
-							<article className="shadow-brutal grainy border-2 border-black bg-sky-500 p-6">
+							<article className="grainy border-2 border-black bg-sky-500 p-6 shadow-brutal">
 								<canvas id="lineGraph" width="400" height="200" />
 							</article>
 						</section>
