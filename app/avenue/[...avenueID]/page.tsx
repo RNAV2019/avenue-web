@@ -5,7 +5,9 @@ const outfit = Outfit({ subsets: ['latin'] });
 
 export default async function avenue({ params }: { params: Promise<{ avenueID: string }> }) {
 	const avenueID = (await params).avenueID[0];
-	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/getAvenue?avenueID=${avenueID}`);
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/getAvenue?avenueID=${avenueID}`, {
+		cache: 'no-store'
+	});
 	const avenueData = await res.json();
 	console.log(avenueData);
 	const avenue = avenueData as Avenue;

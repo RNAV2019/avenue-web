@@ -1,5 +1,6 @@
 'use client';
 import Button from '@/components/Button';
+import DescriptionModal from '@/components/DescriptionModal';
 import ProfileIconModal from '@/components/ProfileIconModal';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -21,6 +22,7 @@ export default function Dashboard() {
 	const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
 	const [loading, setLoading] = useState(true);
 	const [profileModalOpen, setProfileModalOpen] = useState(false);
+	const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
 	useEffect(() => {
 		fetch('/api/getDashboard')
 			.then((res) => res.json())
@@ -32,6 +34,8 @@ export default function Dashboard() {
 
 	const handleOpenProfileModal = () => setProfileModalOpen(true);
 	const handleCloseProfileModal = () => setProfileModalOpen(false);
+	const handleOpenDescriptionModal = () => setDescriptionModalOpen(true);
+	const handleCloseDescriptionModal = () => setDescriptionModalOpen(false);
 	const handleUpdateUserImage = (imageURL: string) => {
 		console.log(`imageurl = ${imageURL}`);
 		update({
@@ -101,7 +105,11 @@ export default function Dashboard() {
 						<div className="flex flex-row items-center justify-between">
 							<h1 className="ml-2 text-xl font-medium">Dashboard</h1>
 							<div className="flex gap-3">
-								<Button className="h-12 w-44" colour="bg-teal-500">
+								<Button
+									className="h-12 w-44"
+									colour="bg-teal-500"
+									onClick={handleOpenDescriptionModal}
+								>
 									Edit Description
 								</Button>
 								<Button className="h-12 w-44" colour="bg-indigo-500" onClick={handleVisitingAvenue}>
@@ -147,6 +155,7 @@ export default function Dashboard() {
 						email={user?.email}
 						defaultImage={user?.image}
 					/>
+					<DescriptionModal isOpen={descriptionModalOpen} onClose={handleCloseDescriptionModal} />
 				</>
 			)}
 		</main>

@@ -1,0 +1,11 @@
+- [x] User authentication
+- [x] Dashboard with live statistics
+- [x] Edit description
+- [ ] Creating links
+- [ ] Updating links
+- [ ] Deleting links
+- [ ] Landing page
+- [ ] Add error handling to forms
+- [ ] Create graph to track clicks
+- [ ] Add a QRCode to webpage in bottom left corner
+- [ ] Add custom themes for user to pick from

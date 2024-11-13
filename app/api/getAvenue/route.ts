@@ -1,4 +1,3 @@
-import { Avenue } from '@/lib/helper';
 import { neon } from '@neondatabase/serverless';
 import { NextRequest, NextResponse } from 'next/server';
 
