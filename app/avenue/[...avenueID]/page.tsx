@@ -1,3 +1,4 @@
+import LinkList from '@/components/LinkList';
 import { Avenue } from '@/lib/helper';
 import { Outfit } from 'next/font/google';
 
@@ -27,6 +28,7 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 			avenueID: avenueID
 		})
 	});
+
 	console.log(statisticRes);
 	return (
 		<main className="p-10">
@@ -36,11 +38,10 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 				</a>
 			</nav>
 			<section className="flex w-full flex-col items-center py-16">
-				<div className="grainy flex w-full max-w-lg flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-red-500 py-14 shadow-calm">
+				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-red-500 py-14 shadow-calm">
 					<h1 className="text-4xl font-bold text-slate-900">{avenue.name}'s Avenue</h1>
-					<p className="text-lg text-slate-900">{avenue.description}</p>
-					{/* Add pencil icon here */}
-					{/* Add links here */}
+					<h3 className="text-xl font-medium text-slate-900">{avenue.description}</h3>
+					<LinkList avenueID={avenueID} />
 				</div>
 			</section>
 		</main>
