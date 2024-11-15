@@ -1,5 +1,7 @@
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	className: string;
+	hover?: string;
+	showcase?: boolean;
 	colour:
 		| 'bg-slate-500'
 		| 'bg-red-500'
@@ -22,7 +24,14 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: React.ReactNode;
 };
 
-export default function Button({ className, children, colour, ...props }: ButtonProps) {
+export default function Button({
+	className,
+	children,
+	colour,
+	hover,
+	showcase,
+	...props
+}: ButtonProps) {
 	return (
 		<button
 			className={`group relative inline-block text-sm font-medium text-black focus:outline-none focus:ring ${className}`}
@@ -30,10 +39,10 @@ export default function Button({ className, children, colour, ...props }: Button
 			{...props}
 		>
 			<span
-				className={`absolute inset-0 translate-x-1 translate-y-1 bg-black transition-transform group-hover:translate-x-0 group-hover:translate-y-0 ${className}`}
+				className={`absolute inset-0 translate-x-1 translate-y-1 bg-black transition-transform ${showcase ? '' : 'group-hover:translate-x-0 group-hover:translate-y-0'} ${className}`}
 			/>
 
-			<span className={`relative block border-2 border-current ${colour} ${className}`}>
+			<span className={`relative block border-2 border-current ${colour} ${className} ${hover}`}>
 				<div className="grainy flex h-full w-full items-center justify-center">{children}</div>
 			</span>
 		</button>

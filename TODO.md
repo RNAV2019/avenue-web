@@ -5,7 +5,8 @@
 - [x] Updating links
 - [x] Deleting links
 - [ ] Landing page
-- [ ] Add error handling to forms
 - [ ] Create graph to track clicks
+- [ ] Add error handling to forms
 - [ ] Add a QRCode to webpage in bottom left corner
 - [ ] Add custom themes for user to pick from
+- [ ] Clean up codebase

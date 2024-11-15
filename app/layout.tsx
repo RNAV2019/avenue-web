@@ -18,8 +18,8 @@ export default async function RootLayout({
 	const session = await getServerSession();
 
 	return (
-		<html lang="en" className="grainy bg-amber-400">
-			<body className={rubik.className}>
+		<html lang="en" className="grainy flex w-full flex-col items-center bg-amber-400">
+			<body className={`w-full max-w-screen-2xl ${rubik.className}`}>
 				<AuthProvider session={session}>{children}</AuthProvider>
 			</body>
 		</html>
