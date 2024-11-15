@@ -5,6 +5,8 @@ import CreateLinkModal from './CreateLinkModal';
 import { Link } from '@/lib/helper';
 import LinkItem from './LinkItem';
 import { useSession } from 'next-auth/react';
+import EditLinkModal from './EditLinkModal';
+import DeleteLinkModal from './DeleteLinkModal';
 
 interface LinkList {
 	avenueID: string;
@@ -18,45 +20,49 @@ export default function LinkList({ avenueID }: LinkList) {
 	const [isOwner, setIsOwner] = useState(false);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/getLinks?avenueID=${avenueID}`, {
+		fetch(`/api/getLinks?avenueID=${avenueID}`, {
 			cache: 'no-store'
 		})
 			.then((res) => res.json())
 			.then((data: LinkWithOwner) => {
+				setIsOwner(data.isOwner);
 				if (data.links.length > 0) {
 					setLinks(data.links);
-					setIsOwner(data.isOwner);
 					console.log(`data: ${!data}`);
-				} else {
-					return;
 				}
 				setLoading(false);
+				return;
 			});
 	}, []);
 
 	const updateLinks = async () => {
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/getLinks?avenueID=${avenueID}`,
-			{
-				cache: 'no-store'
-			}
-		);
-		const data: Link[] = await res.json();
-		if (data.length > 0) {
-			setLinks(data);
+		const res = await fetch(`/api/getLinks?avenueID=${avenueID}`, {
+			cache: 'no-store'
+		});
+		const data: LinkWithOwner = await res.json();
+		if (data.links.length > 0) {
+			setLinks(data.links);
 			console.log(`data: ${!data}`);
 		} else {
+			setLinks([]);
 			return;
 		}
 	};
 
 	return (
-		<div className="flex flex-col items-center gap-4">
+		<div className="flex flex-col items-center gap-2">
 			{!loading && links && links.length > 0 && (
 				<ul>
 					{links.map((link: Link) => (
-						<li key={link.url}>
+						<li
+							key={link.url}
+							className="relative flex flex-row items-center justify-end px-10 py-2"
+						>
+							{session && isOwner && (
+								<DeleteLinkModal updateLinks={updateLinks} link_id={link.id} />
+							)}
 							<LinkItem {...link} />
+							{session && isOwner && <EditLinkModal linkData={link} updateLinks={updateLinks} />}
 						</li>
 					))}
 				</ul>

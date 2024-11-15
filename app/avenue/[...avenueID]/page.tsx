@@ -38,7 +38,7 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 				</a>
 			</nav>
 			<section className="flex w-full flex-col items-center py-16">
-				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-red-500 py-14 shadow-calm">
+				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 shadow-calm">
 					<h1 className="text-4xl font-bold text-slate-900">{avenue.name}'s Avenue</h1>
 					<h3 className="text-xl font-medium text-slate-900">{avenue.description}</h3>
 					<LinkList avenueID={avenueID} />

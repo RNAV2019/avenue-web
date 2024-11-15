@@ -13,7 +13,6 @@ type DescriptionResponse = {
 };
 
 export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) {
-	if (!isOpen) return null;
 	const [description, setDescription] = useState('');
 
 	useEffect(() => {
@@ -24,6 +23,7 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 				setDescription(data.description);
 			});
 	}, []);
+	if (!isOpen) return null;
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -75,7 +75,7 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 						<Button className="h-10 w-32 text-xs" colour={'bg-emerald-500'} type="submit">
 							Update
 						</Button>
-						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} onClick={onClose}>
+						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>
 							Close
 						</Button>
 					</div>

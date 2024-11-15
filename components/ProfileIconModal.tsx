@@ -80,7 +80,7 @@ export default function ProfileIconModal({
 			onClick={onClose}
 		>
 			<div
-				className="dark:bg-secondary shadow-brutal mx-auto my-52 max-w-lg rounded-lg bg-cyan-500"
+				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-cyan-500 shadow-brutal"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<form
@@ -120,7 +120,7 @@ export default function ProfileIconModal({
 						<Button className="h-10 w-32 text-xs" colour={'bg-emerald-500'} type="submit">
 							Update Profile
 						</Button>
-						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} onClick={onClose}>
+						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>
 							Close
 						</Button>
 					</div>

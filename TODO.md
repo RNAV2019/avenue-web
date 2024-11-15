@@ -1,9 +1,9 @@
 - [x] User authentication
 - [x] Dashboard with live statistics
 - [x] Edit description
-- [ ] Creating links
-- [ ] Updating links
-- [ ] Deleting links
+- [x] Creating links
+- [x] Updating links
+- [x] Deleting links
 - [ ] Landing page
 - [ ] Add error handling to forms
 - [ ] Create graph to track clicks

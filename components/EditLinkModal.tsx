@@ -3,36 +3,41 @@
 import { useState } from 'react';
 import Button from './Button';
 import Input from './Input';
+import { EditIcon } from '@/lib/icons/EditIcon';
+import { Link } from '@/lib/helper';
 
 interface LinkProps {
+	linkData: Link;
 	updateLinks: () => void;
 }
 
-export default function CreateLinkModal({ updateLinks }: LinkProps) {
+export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [link, setLink] = useState('');
-	const [name, setName] = useState('');
+	const [link, setLink] = useState(linkData.url);
+	const [name, setName] = useState(linkData.name);
 
 	const handleOpen = () => setIsOpen(true);
 	const handleClose = () => setIsOpen(false);
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (link.length > 0 && name.length > 0) {
-			const res = await fetch('/api/createLink', {
+			const res = await fetch('/api/updateLink', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
 					url: link,
-					name: name
+					name: name,
+					id: linkData.id
 				})
 			});
 			if (res.ok) {
+				console.log('Link updated successfully');
 				updateLinks();
 				handleClose();
 			} else {
-				console.error('Failed to create link');
+				console.error('Failed to update link');
 			}
 		} else {
 			console.error('Invalid link');
@@ -42,14 +47,16 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 
 	if (!isOpen)
 		return (
-			<Button className="h-12 w-64" colour={'bg-green-500'} onClick={handleOpen}>
-				Add Link
-			</Button>
+			<div className="absolute -right-4">
+				<Button onClick={handleOpen} className={'h-12 w-12'} colour={'bg-blue-500'}>
+					<EditIcon fontSize={26} />
+				</Button>
+			</div>
 		);
 	return (
 		<>
-			<Button className="h-12 w-64" colour={'bg-green-500'}>
-				Add Link
+			<Button className={'h-12 w-12'} colour={'bg-blue-500'}>
+				<EditIcon fontSize={26} />
 			</Button>
 			<div className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-80">
 				<div
@@ -61,7 +68,7 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 						name="linkForm"
 						onSubmit={handleSubmit}
 					>
-						<h3 className="mb-2 text-xl font-medium">Create a new link</h3>
+						<h3 className="mb-2 text-xl font-medium">Edit link</h3>
 						<Input
 							type="text"
 							id="link"
@@ -81,8 +88,8 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 							onChange={(e) => setName(e.target.value)}
 						/>
 						<div className="flex flex-row gap-8">
-							<Button className="h-10 w-32 text-xs" colour={'bg-emerald-500'} type="submit">
-								Create
+							<Button className="h-10 w-32 text-xs" colour={'bg-green-500'} type="submit">
+								Edit
 							</Button>
 							<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={handleClose}>
 								Close
