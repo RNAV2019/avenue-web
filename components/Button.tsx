@@ -43,7 +43,9 @@ export default function Button({
 			/>
 
 			<span className={`relative block border-2 border-current ${colour} ${className} ${hover}`}>
-				<div className="grainy flex h-full w-full items-center justify-center">{children}</div>
+				<div className="grainy flex h-full w-full items-center justify-center text-slate-100">
+					{children}
+				</div>
 			</span>
 		</button>
 	);

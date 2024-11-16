@@ -15,6 +15,19 @@ const config: Config = {
 			fontFamily: {
 				rubik: ['var(--font-rubik)'],
 				outfit: ['var(--font-outfit)']
+			},
+			keyframes: {
+				ticker: {
+					'0%': { content: '£100' },
+					'20%': { content: '£80' },
+					'40%': { content: '£60' },
+					'60%': { content: '£40' },
+					'80%': { content: '£20' },
+					'100%': { content: '£0' }
+				}
+			},
+			animation: {
+				ticker: 'ticker 2s ease-out forwards'
 			}
 		}
 	},

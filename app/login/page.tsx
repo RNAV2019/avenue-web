@@ -39,8 +39,8 @@ export default function GET() {
 				</a>
 			</nav>
 			<main className="flex w-full grow flex-col items-center justify-center pb-14">
-				<section className="grainy w-full max-w-lg space-y-4 rounded-lg border-2 border-black bg-cyan-500 p-10">
-					<h1 className="text-2xl font-bold">Login</h1>
+				<section className="grainy w-full max-w-lg space-y-4 border-2 border-black bg-rose-500 p-10 text-white shadow-calm">
+					<h1 className="mb-7 text-3xl font-bold">Login</h1>
 					<form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
 						<div className="space-y-2">
 							<label htmlFor="email">Email</label>
@@ -48,7 +48,9 @@ export default function GET() {
 								type="email"
 								id="email"
 								name="email"
-								className="w-full"
+								placeholder="Email"
+								autoComplete="off"
+								className="w-full text-black placeholder:text-black"
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
@@ -58,11 +60,13 @@ export default function GET() {
 								type="password"
 								id="password"
 								name="password"
-								className="w-full"
+								placeholder="Password"
+								autoComplete="off"
+								className="w-full text-black placeholder:text-black"
 								onChange={(e) => setPassword(e.target.value)}
 							/>
 						</div>
-						<Button className="h-12 w-full self-end" colour={'bg-red-500'} type="submit">
+						<Button className="h-12 w-full self-end" colour={'bg-indigo-500'} type="submit">
 							Login
 						</Button>
 					</form>
