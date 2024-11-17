@@ -21,10 +21,8 @@ export default function ProfileIconModal({
 	onClose,
 	onUpdateUserImage
 }: ProfileIconModalProps) {
-	if (!isOpen) return null;
 	const [imageURL, setImageURL] = useState(defaultImage ?? '');
 	const [isValidImage, setIsValidImage] = useState(false);
-
 	const validateImageURL = async () => {
 		try {
 			const res = await fetch('/api/validateImage', {
@@ -42,6 +40,15 @@ export default function ProfileIconModal({
 			setIsValidImage(false);
 		}
 	};
+	useEffect(() => {
+		if (imageURL) {
+			validateImageURL();
+		} else {
+			setIsValidImage(false);
+		}
+	}, [imageURL]);
+
+	if (!isOpen) return null;
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -67,20 +74,13 @@ export default function ProfileIconModal({
 		}
 	};
 
-	useEffect(() => {
-		if (imageURL) {
-			validateImageURL();
-		} else {
-			setIsValidImage(false);
-		}
-	}, [imageURL]);
 	return (
 		<div
 			className="fixed -top-10 left-0 z-50 h-full w-full bg-black bg-opacity-80"
 			onClick={onClose}
 		>
 			<div
-				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-cyan-500 shadow-brutal"
+				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<form
@@ -114,10 +114,11 @@ export default function ProfileIconModal({
 						name="name"
 						placeholder="URL"
 						autoComplete="off"
+						className="text-black placeholder:text-black"
 						onChange={(e) => setImageURL(e.target.value)}
 					/>
 					<div className="flex flex-row gap-8">
-						<Button className="h-10 w-32 text-xs" colour={'bg-emerald-500'} type="submit">
+						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
 							Update Profile
 						</Button>
 						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>

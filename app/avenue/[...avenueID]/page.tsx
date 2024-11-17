@@ -34,13 +34,13 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 		<main className="p-10">
 			<nav className="flex flex-row items-center justify-between gap-3">
 				<a href="/" className="self-start">
-					<h1 className={`text-2xl font-bold text-slate-900 ${outfit.className}`}>Avenue</h1>
+					<h1 className={`text-2xl font-bold ${outfit.className}`}>Avenue</h1>
 				</a>
 			</nav>
 			<section className="flex w-full flex-col items-center py-16">
-				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 shadow-calm">
-					<h1 className="text-4xl font-bold text-slate-900">{avenue.name}'s Avenue</h1>
-					<h3 className="text-xl font-medium text-slate-900">{avenue.description}</h3>
+				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 text-white shadow-calm">
+					<h1 className="text-4xl font-bold">{avenue.name}'s Avenue</h1>
+					<h3 className="text-xl font-medium">{avenue.description}</h3>
 					<LinkList avenueID={avenueID} />
 				</div>
 			</section>

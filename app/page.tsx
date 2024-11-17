@@ -1,6 +1,8 @@
 'use client';
 import Button from '@/components/Button';
+import ClicksChart from '@/components/ClicksChart';
 import CountdownTicker from '@/components/CountdownTicker';
+import { ClickData } from '@/lib/helper';
 import { DoodleArrowIcon } from '@/lib/icons/DoodleArrowIcon';
 import { DoodleArrowRightIcon } from '@/lib/icons/DoodleArrowRightIcon';
 import { DoodleArrowTopRightIcon } from '@/lib/icons/DoodleArrowTopRightIcon';
@@ -9,6 +11,7 @@ import { GraphIcon } from '@/lib/icons/GraphIcon';
 import { MoneyIcon } from '@/lib/icons/MoneyIcon';
 import { OpenSourceIcon } from '@/lib/icons/OpenSource';
 import { PaperClipIcon } from '@/lib/icons/PaperClipIcon';
+import { ShareIcon } from '@/lib/icons/ShareIcon';
 import TickIcon from '@/lib/icons/TickIcon';
 import { Outfit } from 'next/font/google';
 import { useEffect, useState } from 'react';
@@ -21,6 +24,16 @@ export default function Home() {
 		const numberOfLinks = Math.floor(Math.random() * 15);
 		setRandomNumber([avenueClicks, numberOfLinks]);
 	}, []);
+	const chartData: ClickData[] = [
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 7)), total_clicks: 45 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 6)), total_clicks: 32 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 5)), total_clicks: 67 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 4)), total_clicks: 89 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 3)), total_clicks: 67 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 2)), total_clicks: 89 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate() - 1)), total_clicks: 67 },
+		{ click_date: new Date(new Date().setDate(new Date().getDate())), total_clicks: 89 }
+	];
 
 	return (
 		<>
@@ -49,7 +62,7 @@ export default function Home() {
 					</a>
 				</div>
 			</nav>
-			<main className="mb-10 space-y-14 px-14">
+			<main className="mb-10 space-y-12 px-14">
 				<section className="grainy flex h-[45vh] w-full flex-col items-center justify-center gap-6 border-2 border-black bg-rose-500 p-10 shadow-brutal">
 					<h1 className="text-center text-6xl font-bold text-rose-100">
 						Organize your links in a chaotic,
@@ -78,7 +91,7 @@ export default function Home() {
 							<div className="h-5 w-5 shrink-0 rounded-full border-2 border-black bg-green-500" />
 						</div>
 
-						<div className="grainy group relative z-10 my-3 flex h-full w-full flex-col space-y-4 border-2 border-black bg-rose-400 p-8 shadow-brutal">
+						<div className="grainy group relative z-10 my-3 flex h-full w-full flex-col space-y-4 border-2 border-black bg-rose-400 p-8 text-white shadow-brutal">
 							<div className="flex flex-row items-center justify-between">
 								<h4 className="text-lg font-medium">Dashboard</h4>
 								<div className="flex flex-row gap-2">
@@ -88,41 +101,51 @@ export default function Home() {
 									<Button className={'h-10 w-32 text-xs'} colour={'bg-indigo-500'} showcase>
 										Visit Avenue
 									</Button>
-									<Button className={'h-10 w-10 text-xs'} colour={'bg-fuchsia-500'} showcase>
+									<Button
+										className={'z-30 h-10 w-10 text-xs'}
+										colour={'bg-fuchsia-500'}
+										disabled
+										showcase
+									>
 										<PaperClipIcon className="h-5 w-5" />
 									</Button>
 								</div>
 							</div>
 							<div className="flex w-full flex-row justify-between gap-4">
-								<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-5 shadow-brutal sm:justify-between">
-									<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
-									<div className="relative">
-										<p className="absolute -top-12 left-14 z-30 hidden text-nowrap text-xl font-semibold text-white group-hover:block">
+								<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-rose-500 p-5 shadow-brutal sm:justify-between">
+									<div className="w-full">
+										<p className="absolute left-28 top-16 z-30 hidden text-nowrap text-xl font-semibold text-white group-hover:block">
 											Live statistics
 										</p>
-										<DoodleArrowTopRightIcon className="absolute -top-7 left-5 z-30 hidden h-8 w-8 rotate-180 fill-white group-hover:block" />
-										<p className="font-bold text-gray-900">
+										<DoodleArrowTopRightIcon className="absolute left-20 top-20 z-30 hidden h-8 w-8 rotate-180 fill-white group-hover:block" />
+										<p className="absolute right-20 top-24 z-30 hidden text-nowrap text-xl font-semibold text-white group-hover:block">
+											Copy your link
+										</p>
+										<DoodleArrowIcon className="absolute right-12 top-20 z-30 hidden h-8 w-8 -rotate-12 fill-white group-hover:block" />
+										<p className="relative z-30 font-bold text-white">
 											{randomNumber[0] ? randomNumber[0] : 0}
 										</p>
 
 										<p className="text-xs font-medium">Total Avenue Clicks</p>
 									</div>
 								</div>
-								<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-5 shadow-brutal sm:justify-between">
-									<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
+								<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-rose-500 p-5 shadow-brutal sm:justify-between">
 									<div>
-										<p className="font-bold text-gray-900">
-											{randomNumber[1] ? randomNumber[1] : 0}
-										</p>
+										<p className="font-bold">{randomNumber[1] ? randomNumber[1] : 0}</p>
 
 										<p className="text-xs font-medium">Number of links</p>
 									</div>
 								</div>
 							</div>
+							<div className="grainy border-2 border-black bg-indigo-500 p-6 shadow-brutal">
+								<div className="flex h-[150px] items-center justify-center">
+									{<ClicksChart chartData={chartData} />}
+								</div>
+							</div>
 							<div className="absolute -top-4 left-0 z-20 hidden h-full w-full bg-black/50 transition-colors group-hover:block" />
 						</div>
 					</div>
-					<div className="grainy flex h-[45vh] w-full flex-col gap-14 border-2 border-black bg-rose-400 p-12 shadow-brutal">
+					<div className="grainy flex h-[45vh] w-full flex-col gap-7 border-2 border-black bg-rose-400 p-12 shadow-brutal">
 						<div className="space-y-2">
 							<h4 className="flex flex-row items-center justify-between text-4xl font-bold text-rose-900">
 								Statistics <GraphIcon className="h-9 w-9" />
@@ -140,6 +163,15 @@ export default function Home() {
 							<p className="text-rose-700">
 								Seamlessly edit your avenue description. No need to leave the page, just click the
 								edit button and make the changes. Let your creativity shine!
+							</p>
+						</div>
+						<div className="space-y-2">
+							<h4 className="flex flex-row items-center justify-between text-4xl font-bold text-rose-900">
+								Share
+								<ShareIcon className="h-9 w-9" />
+							</h4>
+							<p className="text-rose-700">
+								Copy your avenue link with a single click and share it with others!
 							</p>
 						</div>
 					</div>
@@ -245,7 +277,7 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<footer className="grainy mt-8 flex h-24 w-full items-center justify-between border-2 border-black bg-indigo-500 px-8 shadow-brutal">
+				<footer className="grainy flex h-24 w-full items-center justify-between border-2 border-black bg-indigo-500 px-8 shadow-brutal">
 					<div className="flex items-center justify-center gap-4">
 						<span className="text-lg font-bold text-indigo-100">Avenue</span>
 					</div>

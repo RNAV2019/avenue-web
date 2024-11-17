@@ -2,6 +2,12 @@ export interface ImageValidity {
 	valid: boolean;
 }
 
+export interface AvenueUser {
+	id: string;
+	name: string;
+	profile_image: string | null;
+}
+
 export interface Avenue {
 	id: string;
 	created_at: string;
@@ -35,6 +41,18 @@ export interface Link {
 	id: string;
 	url: string;
 	name: string;
+}
+
+export interface ClickData {
+	click_date: Date;
+	total_clicks: number;
+}
+
+export interface DashboardInfo {
+	avenueID: string;
+	aggregateClicks: number;
+	linksRes: number;
+	chartData: ClickData[];
 }
 
 export type Colour =

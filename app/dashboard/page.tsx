@@ -1,26 +1,21 @@
 'use client';
 import Button from '@/components/Button';
+import ClicksChart from '@/components/ClicksChart';
 import DescriptionModal from '@/components/DescriptionModal';
 import ProfileIconModal from '@/components/ProfileIconModal';
+import { DashboardInfo } from '@/lib/helper';
+import { PaperClipIcon } from '@/lib/icons/PaperClipIcon';
+import { PointerIcon } from '@/lib/icons/PointerIcon';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-type avenueID = {
-	avenueID: string;
-};
-
-type DashboardInfo = {
-	aggregateClicks: number;
-	linksRes: number;
-};
 
 export default function Dashboard() {
 	const { data: session, update, status } = useSession();
 	const user = session?.user;
 	const router = useRouter();
-	const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
 	const [loading, setLoading] = useState(true);
+	const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
 	const [profileModalOpen, setProfileModalOpen] = useState(false);
 	const [descriptionModalOpen, setDescriptionModalOpen] = useState(false);
 	useEffect(() => {
@@ -29,13 +24,10 @@ export default function Dashboard() {
 			.then((data: DashboardInfo) => {
 				setDashboardInfo(data);
 				setLoading(false);
+				router.prefetch(`/avenue/${data.avenueID}`);
 			});
 	}, []);
 
-	const handleOpenProfileModal = () => setProfileModalOpen(true);
-	const handleCloseProfileModal = () => setProfileModalOpen(false);
-	const handleOpenDescriptionModal = () => setDescriptionModalOpen(true);
-	const handleCloseDescriptionModal = () => setDescriptionModalOpen(false);
 	const handleUpdateUserImage = (imageURL: string) => {
 		console.log(`imageurl = ${imageURL}`);
 		update({
@@ -46,28 +38,23 @@ export default function Dashboard() {
 			}
 		});
 	};
-	const handleVisitingAvenue = async () => {
-		const res = await fetch('/api/visitAvenue', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-		const data: avenueID = await res.json();
-		if (data.avenueID) {
-			router.prefetch(`/avenue/${data.avenueID}`);
-			router.push(`/avenue/${data.avenueID}`);
-		}
-		console.log(data.avenueID);
-	};
 
-	console.log(user);
+	const handleCopyLink = async () => {
+		try {
+			await navigator.clipboard.writeText(
+				`${window.location.origin}/avenue/${dashboardInfo?.avenueID}`
+			);
+			console.log('Link copied to clipboard');
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	return (
 		<main className="space-y-10 p-10">
 			{status != 'authenticated' && (
 				<div className="flex h-screen flex-col items-center justify-center gap-3 text-3xl font-bold">
-					Loading
+					Loading...
 				</div>
 			)}
 			{status == 'authenticated' && (
@@ -78,7 +65,7 @@ export default function Dashboard() {
 							<span>- logged in as {user?.email}</span>
 						</div>
 						<div className="flex flex-row items-center justify-center gap-8">
-							<button onClick={handleOpenProfileModal}>
+							<button onClick={() => setProfileModalOpen(true)}>
 								{user?.image ? (
 									<img
 										src={user?.image}
@@ -94,68 +81,84 @@ export default function Dashboard() {
 
 							<Button
 								className="h-12 w-44"
-								colour="bg-red-500"
+								colour="bg-rose-500"
 								onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
 							>
 								Sign out
 							</Button>
 						</div>
 					</nav>
-					<div className="grainy flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-6 shadow-brutal">
+					<div className="grainy flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-6 text-white shadow-brutal">
 						<div className="flex flex-row items-center justify-between">
 							<h1 className="ml-2 text-xl font-medium">Dashboard</h1>
 							<div className="flex gap-3">
 								<Button
 									className="h-12 w-44"
-									colour="bg-teal-500"
-									onClick={handleOpenDescriptionModal}
+									colour="bg-rose-500"
+									onClick={() => setDescriptionModalOpen(true)}
 								>
 									Edit Description
 								</Button>
-								<Button className="h-12 w-44" colour="bg-indigo-500" onClick={handleVisitingAvenue}>
+								<Button
+									className="h-12 w-44"
+									colour="bg-indigo-500"
+									onClick={() => router.push(`/avenue/${dashboardInfo?.avenueID}`)}
+									disabled={loading}
+								>
 									Visit my avenue
+								</Button>
+								<Button
+									className="h-12 w-12 text-xs"
+									colour="bg-fuchsia-500"
+									onClick={handleCopyLink}
+								>
+									<PaperClipIcon className="h-5 w-5" />
 								</Button>
 							</div>
 						</div>
 						<section className="flex flex-row justify-between gap-3">
-							<article className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 shadow-brutal sm:justify-between">
-								<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
-
+							<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-rose-500 p-6 shadow-brutal sm:justify-between">
 								<div>
-									<p className="text-3xl font-bold text-gray-900">
+									<p className="text-3xl font-bold">
 										{loading ? 'Loading' : dashboardInfo?.aggregateClicks}
 									</p>
 
 									<p className="text-sm font-medium">Total Avenue Clicks</p>
 								</div>
-							</article>
-							<article className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-orange-500 p-6 shadow-brutal sm:justify-between">
-								<span className="grainy rounded-full border-2 border-black bg-amber-500 p-3 text-black sm:order-last"></span>
-
+								<PointerIcon className="h-8 w-8 -rotate-6" />
+							</div>
+							<div className="grainy flex flex-1 items-center gap-4 border-2 border-black bg-rose-500 p-6 shadow-brutal sm:justify-between">
 								<div>
-									<p className="text-3xl font-bold text-gray-900">
+									<p className="text-3xl font-bold">
 										{loading ? 'Loading' : dashboardInfo?.linksRes}
 									</p>
 
 									<p className="text-sm font-medium">Number of links</p>
 								</div>
-							</article>
+								<PaperClipIcon className="h-8 w-8" />
+							</div>
 						</section>
 						<section>
-							<article className="grainy border-2 border-black bg-sky-500 p-6 shadow-brutal">
-								<canvas id="lineGraph" width="400" height="200" />
-							</article>
+							<div className="grainy border-2 border-black bg-indigo-500 p-6 shadow-brutal">
+								<div className="flex h-[350px] items-center justify-center">
+									{!dashboardInfo?.chartData && <p>Loading...</p>}
+									{dashboardInfo?.chartData && <ClicksChart chartData={dashboardInfo?.chartData} />}
+								</div>
+							</div>
 						</section>
 					</div>
 					<ProfileIconModal
 						isOpen={profileModalOpen}
-						onClose={handleCloseProfileModal}
+						onClose={() => setProfileModalOpen(false)}
 						onUpdateUserImage={handleUpdateUserImage}
 						name={user?.name}
 						email={user?.email}
 						defaultImage={user?.image}
 					/>
-					<DescriptionModal isOpen={descriptionModalOpen} onClose={handleCloseDescriptionModal} />
+					<DescriptionModal
+						isOpen={descriptionModalOpen}
+						onClose={() => setDescriptionModalOpen(false)}
+					/>
 				</>
 			)}
 		</main>

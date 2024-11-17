@@ -1,11 +1,6 @@
+import { AvenueUser } from '@/lib/helper';
 import { neon } from '@neondatabase/serverless';
 import { getServerSession } from 'next-auth';
-
-type user = {
-	id: string;
-	name: string;
-	profile_image: string | null;
-};
 
 export async function GET(req: Request) {
 	const session = await getServerSession();
@@ -15,9 +10,9 @@ export async function GET(req: Request) {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	// Check whether user has an avenue
-	const user: user = (
+	const user: AvenueUser = (
 		await sql`SELECT id, name, profile_image FROM users WHERE email = ${email}`
-	)[0] as user;
+	)[0] as AvenueUser;
 	const defaultDescription: string = 'Enter a description';
 	console.log(`user: ${user}`);
 	// Check if user has an avenue

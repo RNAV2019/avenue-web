@@ -46,7 +46,7 @@ export default function DeleteLinkModal({ updateLinks, link_id }: LinkProps) {
 			</Button>
 			<div className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-80">
 				<div
-					className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-cyan-500 shadow-brutal"
+					className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
 					onClick={(e) => e.stopPropagation()}
 				>
 					<form
@@ -54,7 +54,7 @@ export default function DeleteLinkModal({ updateLinks, link_id }: LinkProps) {
 						name="linkForm"
 						onSubmit={handleSubmit}
 					>
-						<h3 className="mb-2 text-xl font-medium">Edit link</h3>
+						<h3 className="mb-2 text-xl font-medium">Delete link</h3>
 						<h4 className="text-lg font-semibold">Are you sure you want to delete this link?</h4>
 						<div className="flex flex-row gap-8">
 							<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">

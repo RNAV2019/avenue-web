@@ -53,7 +53,7 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 			onClick={onClose}
 		>
 			<div
-				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-cyan-500 shadow-brutal"
+				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<form
@@ -68,11 +68,12 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 						name="description"
 						placeholder="Description"
 						autoComplete="off"
+						className="text-black placeholder:text-black"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
 					/>
 					<div className="flex flex-row gap-8">
-						<Button className="h-10 w-32 text-xs" colour={'bg-emerald-500'} type="submit">
+						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
 							Update
 						</Button>
 						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>

@@ -4,8 +4,10 @@
 - [x] Creating links
 - [x] Updating links
 - [x] Deleting links
-- [ ] Landing page
-- [ ] Create graph to track clicks
+- [x] Landing page
+- [x] Create graph to track clicks
+- [ ] Make all pages responsive / mobile-friendly
+- [ ] Add loading spinners
 - [ ] Add error handling to forms
 - [ ] Add a QRCode to webpage in bottom left corner
 - [ ] Add custom themes for user to pick from

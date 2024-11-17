@@ -60,7 +60,7 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 			</Button>
 			<div className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-80">
 				<div
-					className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-cyan-500 shadow-brutal"
+					className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
 					onClick={(e) => e.stopPropagation()}
 				>
 					<form
@@ -75,6 +75,7 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 							name="link"
 							placeholder="URL"
 							autoComplete="off"
+							className="text-black placeholder:text-black"
 							value={link}
 							onChange={(e) => setLink(e.target.value)}
 						/>
@@ -84,11 +85,12 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 							name="name"
 							placeholder="Name"
 							autoComplete="off"
+							className="text-black placeholder:text-black"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 						/>
 						<div className="flex flex-row gap-8">
-							<Button className="h-10 w-32 text-xs" colour={'bg-green-500'} type="submit">
+							<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
 								Edit
 							</Button>
 							<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={handleClose}>

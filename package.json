@@ -12,9 +12,11 @@
     "@neondatabase/serverless": "^0.10.3",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.6",
     "next": "14.2.4",
     "next-auth": "^4.24.10",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18"
   },
   "devDependencies": {
