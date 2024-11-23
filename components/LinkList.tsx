@@ -61,7 +61,7 @@ export default function LinkList({ avenueID }: LinkList) {
 							{session && isOwner && (
 								<DeleteLinkModal updateLinks={updateLinks} link_id={link.id} />
 							)}
-							<LinkItem {...link} />
+							<LinkItem isOwner={isOwner} link={link} />
 							{session && isOwner && <EditLinkModal linkData={link} updateLinks={updateLinks} />}
 						</li>
 					))}

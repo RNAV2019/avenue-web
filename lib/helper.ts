@@ -14,7 +14,7 @@ export interface Avenue {
 	updated_at: string;
 	name: string;
 	description: string;
-	profile_image: string;
+	profile_image?: string;
 	user_id: string;
 }
 

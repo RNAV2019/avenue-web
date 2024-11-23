@@ -19,7 +19,7 @@ export default async function RootLayout({
 
 	return (
 		<html lang="en" className="grainy flex w-full flex-col items-center bg-amber-400">
-			<body className={`w-full max-w-screen-2xl ${rubik.className}`}>
+			<body className={`container ${rubik.className}`}>
 				<AuthProvider session={session}>{children}</AuthProvider>
 			</body>
 		</html>

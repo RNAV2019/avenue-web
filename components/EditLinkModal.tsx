@@ -60,7 +60,7 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 			</Button>
 			<div className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-80">
 				<div
-					className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
+					className="dark:bg-secondary mx-auto my-52 max-w-xs rounded-lg bg-rose-500 shadow-brutal sm:max-w-sm md:max-w-md lg:max-w-lg"
 					onClick={(e) => e.stopPropagation()}
 				>
 					<form
@@ -68,7 +68,7 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 						name="linkForm"
 						onSubmit={handleSubmit}
 					>
-						<h3 className="mb-2 text-xl font-medium">Edit link</h3>
+						<h3 className="mb-2 text-xl font-medium text-white">Edit link</h3>
 						<Input
 							type="text"
 							id="link"

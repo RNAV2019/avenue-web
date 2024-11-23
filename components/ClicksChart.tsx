@@ -11,9 +11,35 @@ import {
 	Tooltip
 } from 'chart.js';
 
-export default function ClicksChart({ chartData }: { chartData: ClickData[] }) {
+export default function ClicksChart({
+	chartData,
+	windowWidth
+}: {
+	chartData: ClickData[];
+	windowWidth: number;
+}) {
 	ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip); // Register Tooltip plugin
-	const labels = chartData.map((data) => new Date(data.click_date).toLocaleDateString());
+	// Function to format dates based on screen size
+	const formatDate = (date: Date) => {
+		// lg screens typically start at 1024px
+		if (windowWidth >= 1024) {
+			// Long form date: "January 1, 2024"
+			return date.toLocaleDateString(undefined, {
+				month: 'short',
+				day: 'numeric',
+				year: '2-digit'
+			});
+		} else {
+			// Short form date: "1/1/24" or "01/01"
+			return date.toLocaleDateString(undefined, {
+				month: 'numeric',
+				day: 'numeric'
+			});
+		}
+	};
+
+	const labels = chartData.map((data) => formatDate(new Date(data.click_date)));
+
 	const values = chartData.map((data) => data.total_clicks);
 	const lineData: ChartData<'line'> = {
 		labels,
@@ -35,7 +61,12 @@ export default function ClicksChart({ chartData }: { chartData: ClickData[] }) {
 		scales: {
 			x: {
 				ticks: {
-					color: 'white'
+					color: 'white',
+					maxRotation: 45,
+					autoSkip: true,
+					font: {
+						size: windowWidth >= 1024 ? 12 : 10
+					}
 				}
 			},
 			y: {
@@ -55,7 +86,18 @@ export default function ClicksChart({ chartData }: { chartData: ClickData[] }) {
 				backgroundColor: 'rgba(0,0,0,0.8)',
 				titleColor: 'white',
 				bodyColor: 'white',
-				displayColors: false
+				displayColors: false,
+				callbacks: {
+					// Optional: Show full date in tooltip regardless of screen size
+					title: (context) => {
+						const date = new Date(chartData[context[0].dataIndex].click_date);
+						return date.toLocaleDateString(undefined, {
+							month: 'long',
+							day: 'numeric',
+							year: 'numeric'
+						});
+					}
+				}
 			}
 		}
 	};

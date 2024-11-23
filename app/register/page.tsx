@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
-export default function register() {
+export default function Register() {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -37,14 +37,14 @@ export default function register() {
 
 	return (
 		<div className="flex h-screen flex-col">
-			<nav className="flex items-start px-14 pt-14">
-				<a href="/" className="self-start">
+			<nav className="flex flex-col items-center justify-between gap-3 p-4 py-6 md:flex-row md:p-14">
+				<a href="/" className="self-center md:self-start">
 					<h1 className={`text-2xl font-bold text-slate-900 ${outfit.className}`}>Avenue</h1>
 				</a>
 			</nav>
 			<main className="flex w-full grow flex-col items-center justify-center pb-14">
-				<section className="grainy w-full max-w-lg space-y-4 border-2 border-black bg-rose-500 p-10 text-white shadow-calm">
-					<h1 className="mb-7 text-2xl font-bold">Register</h1>
+				<section className="grainy w-full max-w-xs space-y-4 border-2 border-black bg-rose-500 p-8 text-white shadow-calm sm:max-w-sm md:max-w-md md:p-9 lg:max-w-lg lg:p-10">
+					<h1 className="mb-7 text-xl font-bold sm:text-2xl md:text-3xl">Register</h1>
 					<form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
 						<div className="space-y-2">
 							<label htmlFor="name">Name</label>

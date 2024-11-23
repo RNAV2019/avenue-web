@@ -53,7 +53,7 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 			onClick={onClose}
 		>
 			<div
-				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
+				className="dark:bg-secondary mx-auto my-52 max-w-xs rounded-lg bg-rose-500 shadow-brutal sm:max-w-sm md:max-w-md lg:max-w-lg"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<form
@@ -61,7 +61,7 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 					name="descriptionForm"
 					onSubmit={handleSubmit}
 				>
-					<h3 className="mb-2 text-xl font-medium">Update Avenue Description</h3>
+					<h3 className="mb-2 text-xl font-medium text-white">Update Avenue Description</h3>
 					<Input
 						type="text"
 						id="description"

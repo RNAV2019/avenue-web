@@ -1,6 +1,7 @@
 import LinkList from '@/components/LinkList';
 import { Avenue } from '@/lib/helper';
 import { Outfit } from 'next/font/google';
+import Image from 'next/image';
 
 const outfit = Outfit({ subsets: ['latin'] });
 
@@ -31,19 +32,39 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 
 	console.log(statisticRes);
 	return (
-		<main className="p-10">
-			<nav className="flex flex-row items-center justify-between gap-3">
-				<a href="/" className="self-start">
-					<h1 className={`text-2xl font-bold ${outfit.className}`}>Avenue</h1>
+		<>
+			<nav className="flex flex-col items-center justify-between gap-3 px-4 pt-6 md:flex-row md:px-14">
+				<a href="/" className="self-center md:self-start">
+					<h1 className={`text-2xl font-bold text-slate-900 ${outfit.className}`}>Avenue</h1>
 				</a>
 			</nav>
-			<section className="flex w-full flex-col items-center py-16">
-				<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 text-white shadow-calm">
-					<h1 className="text-4xl font-bold">{avenue.name}'s Avenue</h1>
-					<h3 className="text-xl font-medium">{avenue.description}</h3>
-					<LinkList avenueID={avenueID} />
-				</div>
-			</section>
-		</main>
+			<main className="p-10">
+				<section className="flex h-full w-full flex-col items-center py-16">
+					<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 text-white shadow-calm">
+						{avenue.profile_image ? (
+							<Image
+								src={avenue.profile_image}
+								alt={'Profile Image'}
+								width={96}
+								height={96}
+								className="h-24 w-24 rounded-full border-2 border-black"
+							/>
+						) : (
+							<div className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-black bg-orange-600 text-2xl">
+								{avenue.name?.charAt(0)}
+							</div>
+						)}
+
+						<h1 className="text-2xl font-bold md:text-3xl lg:text-4xl">
+							{avenue.name}&apos;s Avenue
+						</h1>
+						<h3 className="text-ellipsis text-wrap text-base font-medium md:text-lg lg:text-xl">
+							{avenue.description}
+						</h3>
+						<LinkList avenueID={avenueID} />
+					</div>
+				</section>
+			</main>
+		</>
 	);
 }

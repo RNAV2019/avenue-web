@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Button from './Button';
 import { ImageValidity } from '@/lib/helper';
 import Input from './Input';
+import Image from 'next/image';
 
 interface ProfileIconModalProps {
 	isOpen: boolean;
@@ -80,7 +81,7 @@ export default function ProfileIconModal({
 			onClick={onClose}
 		>
 			<div
-				className="dark:bg-secondary mx-auto my-52 max-w-lg rounded-lg bg-rose-500 shadow-brutal"
+				className="dark:bg-secondary mx-auto my-52 max-w-xs rounded-lg bg-rose-500 shadow-brutal sm:max-w-sm md:max-w-md lg:max-w-lg"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<form
@@ -88,16 +89,20 @@ export default function ProfileIconModal({
 					name="profileIconForm"
 					onSubmit={handleSubmit}
 				>
-					<h3 className="mb-2 text-xl font-medium">Update Profile Icon</h3>
+					<h3 className="mb-2 text-xl font-medium text-white">Update Profile Icon</h3>
 					{imageURL != '' && isValidImage && (
-						<img
+						<Image
+							width={100}
+							height={100}
 							src={imageURL}
 							alt="Profile"
 							className="h-24 w-24 rounded-full border-2 border-black"
 						/>
 					)}
 					{(imageURL == '' || !isValidImage) && defaultImage && (
-						<img
+						<Image
+							width={100}
+							height={100}
 							src={defaultImage}
 							alt="Profile"
 							className="h-24 w-24 rounded-full border-2 border-black"
