@@ -2,7 +2,9 @@
 import Button from '@/components/Button';
 import ClicksChart from '@/components/ClicksChart';
 import CountdownTicker from '@/components/CountdownTicker';
-import { ClickData } from '@/lib/helper';
+import { ClickData, Colour } from '@/lib/helper';
+import { AddIcon } from '@/lib/icons/AddIcon';
+import { DeleteIcon } from '@/lib/icons/DeleteIcon';
 import { DoodleArrowIcon } from '@/lib/icons/DoodleArrowIcon';
 import { DoodleArrowRightIcon } from '@/lib/icons/DoodleArrowRightIcon';
 import { DoodleArrowTopRightIcon } from '@/lib/icons/DoodleArrowTopRightIcon';
@@ -43,6 +45,15 @@ export default function Home() {
 		click_date: new Date(new Date().setDate(new Date().getDate() - (7 - i))),
 		total_clicks: randomNumber[i + 2]
 	}));
+
+	const exampleList: {
+		number: string;
+		colour: Colour;
+	}[] = [
+		{ number: 'One', colour: 'bg-sky-500' },
+		{ number: 'Two', colour: 'bg-emerald-500' },
+		{ number: 'Three', colour: 'bg-yellow-500' }
+	];
 	return (
 		<>
 			<nav className="flex flex-col items-center justify-between gap-3 p-4 py-6 md:flex-row md:p-14">
@@ -88,6 +99,7 @@ export default function Home() {
 				</div>
 			</nav>
 			<main className="mb-10 space-y-12 px-4 md:px-14">
+				{/* Hero section */}
 				<section className="grainy flex min-h-[45vh] w-full flex-col items-center justify-center gap-6 border-2 border-black bg-rose-500 p-6 shadow-brutal md:p-10">
 					<h1 className="text-center text-3xl font-bold text-rose-100 md:text-4xl lg:text-5xl xl:text-6xl">
 						Organize your links in a chaotic, <br className="hidden md:block" />
@@ -110,8 +122,9 @@ export default function Home() {
 						</a>
 					</div>
 				</section>
-				<section className="grid grid-cols-1 gap-4 md:gap-8 lg:grid-cols-3">
-					<div className="grainy relative z-0 order-1 col-span-1 w-full select-none border-2 border-black bg-indigo-500 p-4 py-12 shadow-brutal md:p-12 lg:col-span-2">
+				<div className="grid grid-cols-1 gap-4 md:gap-8 lg:grid-cols-3">
+					{/* Dashboard section */}
+					<section className="grainy relative z-0 order-1 col-span-1 w-full select-none border-2 border-black bg-indigo-500 p-4 py-12 shadow-brutal md:p-12 lg:col-span-2">
 						<div
 							id="nav-dots"
 							className="absolute right-4 top-4 flex flex-row gap-2 md:right-6 md:top-6"
@@ -124,19 +137,19 @@ export default function Home() {
 						<div className="grainy group relative z-10 my-3 flex h-full w-full flex-col space-y-4 border-2 border-black bg-rose-400 p-4 text-white shadow-brutal md:p-8">
 							<div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 								<h4 className="text-sm font-medium lg:text-base xl:text-lg">Dashboard</h4>
-								<div className="flex w-full flex-col gap-2 sm:flex-row md:w-auto">
-									<Button className={'h-10 w-full text-xs sm:w-32'} colour={'bg-rose-500'} showcase>
+								<div className="flex w-full flex-col gap-2 md:w-auto md:flex-row">
+									<Button className={'h-10 w-full text-xs md:w-32'} colour={'bg-rose-500'} showcase>
 										Edit Description
 									</Button>
 									<Button
-										className={'h-10 w-full text-xs sm:w-32'}
+										className={'h-10 w-full text-xs md:w-32'}
 										colour={'bg-indigo-500'}
 										showcase
 									>
 										Visit Avenue
 									</Button>
 									<Button
-										className={'z-30 h-10 w-full text-xs sm:w-10'}
+										className={'z-30 h-10 w-full text-xs md:w-10'}
 										colour={'bg-fuchsia-500'}
 										disabled
 										showcase
@@ -186,8 +199,9 @@ export default function Home() {
 							</div>
 							<div className="absolute -top-4 left-0 z-20 block h-full w-full bg-black/50 transition-colors md:hidden md:group-hover:block" />
 						</div>
-					</div>
-					<div className="grainy order-2 flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-4 sm:gap-5 sm:p-6 md:gap-7 md:p-8 lg:p-10 xl:p-12">
+					</section>
+					{/* Accompanying information about the dashboard */}
+					<section className="grainy order-2 flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-4 sm:gap-5 sm:p-6 md:gap-7 md:p-8 lg:p-10 xl:p-12">
 						<div className="space-y-1 sm:space-y-2">
 							<h4 className="flex flex-row items-center justify-between text-xl font-bold text-rose-900 sm:text-xl md:text-2xl xl:text-3xl">
 								Statistics{' '}
@@ -217,8 +231,9 @@ export default function Home() {
 								Copy your avenue link with a single click and share it with others!
 							</p>
 						</div>
-					</div>
-					<div className="grainy order-4 flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-4 sm:gap-5 sm:p-6 md:gap-7 md:p-8 lg:p-10 xl:p-12">
+					</section>
+					{/* Accompanying information for the pricing section */}
+					<section className="grainy order-4 flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-4 sm:gap-5 sm:p-6 md:gap-7 md:p-8 lg:p-10 xl:p-12">
 						<div className="space-y-2">
 							<h4 className="flex flex-row items-center justify-between text-xl font-bold text-rose-900 sm:text-xl md:text-2xl xl:text-3xl">
 								Totally FREE!
@@ -244,8 +259,9 @@ export default function Home() {
 								View on GitHub
 							</Button>
 						</a>
-					</div>
-					<div className="grainy relative order-3 col-span-1 flex w-full flex-col gap-5 border-2 border-black bg-indigo-500 p-6 shadow-brutal md:order-4 md:p-10 lg:col-span-2">
+					</section>
+					{/* Pricing section */}
+					<section className="grainy relative order-3 col-span-1 flex w-full flex-col gap-5 border-2 border-black bg-indigo-500 p-6 shadow-brutal md:order-4 md:p-10 lg:col-span-2">
 						<div
 							id="nav-dots"
 							className="absolute right-4 top-4 flex flex-row gap-2 md:right-6 md:top-6"
@@ -278,8 +294,111 @@ export default function Home() {
 								</li>
 							</ul>
 						</div>
-					</div>
-					<div className="grainy order-5 col-span-1 w-full border-2 border-black bg-rose-400 p-6 shadow-brutal md:p-10 lg:col-span-3">
+					</section>
+					{/* Example Avenue */}
+					<section className="grainy relative z-0 order-4 col-span-1 h-full w-full select-none border-2 border-black bg-indigo-500 p-4 py-12 shadow-brutal md:p-12 lg:col-span-2">
+						<div
+							id="nav-dots"
+							className="absolute right-4 top-4 flex flex-row gap-2 md:right-6 md:top-6"
+						>
+							<div className="h-4 w-4 shrink-0 rounded-full border-2 border-black bg-red-500 md:h-5 md:w-5" />
+							<div className="h-4 w-4 shrink-0 rounded-full border-2 border-black bg-yellow-500 md:h-5 md:w-5" />
+							<div className="h-4 w-4 shrink-0 rounded-full border-2 border-black bg-green-500 md:h-5 md:w-5" />
+						</div>
+
+						<div className="grainy group relative z-10 my-3 flex h-full w-full flex-col items-center justify-center space-y-4 border-2 border-black bg-rose-200 p-4 text-white shadow-brutal md:p-8">
+							<div className="grainy flex w-full max-w-xl flex-col items-center justify-center gap-3 rounded-md border-2 border-black bg-rose-500 py-14 text-white shadow-calm">
+								<div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-black bg-orange-600 text-2xl">
+									B
+								</div>
+								<h1 className="text-2xl font-bold md:text-3xl lg:text-3xl">Bob&apos;s Avenue</h1>
+								<div className="relative flex flex-col items-center gap-4">
+									<DoodleArrowTopRightIcon className="absolute -left-0 -top-6 z-40 block h-8 w-8 rotate-90 fill-white md:-left-0 md:-top-6 md:hidden md:rotate-90 md:group-hover:block" />
+									<p className="absolute -left-8 -top-14 z-30 text-nowrap text-lg font-semibold text-white sm:text-xl md:-left-14 md:-top-14 md:hidden md:group-hover:block">
+										Delete your links
+									</p>
+									<DoodleArrowTopRightIcon className="absolute -top-5 left-[12.5rem] z-40 block h-8 w-8 rotate-[170deg] fill-white sm:left-[21rem] sm:rotate-[170deg] md:-top-5 md:hidden md:group-hover:block" />
+									<p className="absolute -top-12 left-32 z-30 text-nowrap text-lg font-semibold text-white sm:left-72 sm:text-xl md:-top-12 md:hidden md:group-hover:block">
+										Copy your link
+									</p>
+									<DoodleArrowTopRightIcon className="absolute left-24 top-56 z-40 block h-8 w-8 rotate-0 fill-white sm:left-36 md:top-56 md:hidden md:rotate-0 md:group-hover:block" />
+									<p className="absolute left-0 top-64 z-30 text-nowrap text-lg font-semibold text-white sm:left-12 sm:text-xl md:top-64 md:hidden md:group-hover:block">
+										Add your link
+									</p>
+									{exampleList.map((item, index) => (
+										<div className="flex flex-row items-center gap-2" key={index}>
+											{index === 0 ? (
+												<Button className={'z-30 h-12 w-12'} colour={'bg-red-500'} showcase>
+													<DeleteIcon fontSize={26} />
+												</Button>
+											) : (
+												<Button className={'h-12 w-12'} colour={'bg-red-500'} showcase>
+													<DeleteIcon fontSize={26} />
+												</Button>
+											)}
+											<Button className={'h-12 w-32 sm:w-64'} colour={item.colour} showcase>
+												Link {item.number}
+											</Button>
+											{index === 0 ? (
+												<Button className={'z-30 h-12 w-12'} colour={'bg-blue-500'} showcase>
+													<EditIcon fontSize={26} />
+												</Button>
+											) : (
+												<Button className={'h-12 w-12'} colour={'bg-blue-500'} showcase>
+													<EditIcon fontSize={26} />
+												</Button>
+											)}
+										</div>
+									))}
+									<Button
+										className="z-30 h-12 w-60 cursor-default sm:w-64"
+										colour={'bg-indigo-500'}
+										showcase
+									>
+										Add Link
+									</Button>
+								</div>
+							</div>
+							<div className="absolute -top-4 left-0 z-20 block h-full w-full bg-black/60 transition-colors md:hidden md:group-hover:block" />
+						</div>
+					</section>
+					{/* Accompanying information about example avenue */}
+					<section className="grainy order-5 flex w-full flex-col gap-4 border-2 border-black bg-rose-400 p-4 sm:gap-5 sm:p-6 md:gap-7 md:p-8 lg:p-10 xl:p-12">
+						<div className="space-y-1 sm:space-y-2">
+							<h4 className="flex flex-row items-center justify-between text-xl font-bold text-rose-900 sm:text-xl md:text-2xl xl:text-3xl">
+								Add your links
+								<AddIcon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 xl:h-9 xl:w-9" />
+							</h4>
+							<p className="text-xs text-rose-700 sm:text-base xl:text-xl">
+								Curate your own collection of links by adding them to your avenue - whether
+								it&apos;s just a couple or dozens of them. There&apos;s no limit to how many links
+								you can include, so feel free to add as many as you need to create your perfect
+								digital hub.
+							</p>
+						</div>
+						<div className="space-y-1 sm:space-y-2">
+							<h4 className="flex flex-row items-center justify-between text-xl font-bold text-rose-900 sm:text-xl md:text-2xl xl:text-3xl">
+								Edit your links
+								<EditIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 xl:h-9 xl:w-9" />
+							</h4>
+							<p className="text-xs text-rose-700 sm:text-base xl:text-xl">
+								Modify any link&apos;s name and URL whenever you want with just a few clicks, and of
+								course have the option to delete them too.
+							</p>
+						</div>
+						<div className="space-y-1 sm:space-y-2">
+							<h4 className="flex flex-row items-center justify-between text-xl font-bold text-rose-900 sm:text-xl md:text-2xl xl:text-3xl">
+								Delete your links
+								<DeleteIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 xl:h-9 xl:w-9" />
+							</h4>
+							<p className="text-xs text-rose-700 sm:text-base xl:text-xl">
+								Remove links you no longer need with just a click of a button. Keep your avenue
+								clean and organized by clearing out outdated or unnecessary links.
+							</p>
+						</div>
+					</section>
+					{/* How it works section */}
+					<section className="grainy order-5 col-span-1 w-full border-2 border-black bg-rose-400 p-6 shadow-brutal md:p-10 lg:col-span-3">
 						<h4 className="mb-8 text-center text-3xl font-semibold text-rose-800 lg:text-4xl xl:text-5xl">
 							How it works
 						</h4>
@@ -324,8 +443,8 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
+				</div>
 				<footer className="grainy flex min-h-[96px] w-full flex-col items-center justify-between border-2 border-black bg-indigo-500 p-4 shadow-brutal md:h-24 md:flex-row md:px-8">
 					<div className="flex items-center justify-center gap-4">
 						<span className="text-lg font-bold text-indigo-100">Avenue</span>

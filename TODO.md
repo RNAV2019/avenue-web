@@ -7,9 +7,8 @@
 - [x] Landing page
 - [x] Create graph to track clicks
 - [x] Make all pages responsive / mobile-friendly
-- [ ] Add section to for example avenue
+- [x] Add example avenue section to landing page
 - [ ] Add a QRCode to avenue in bottom left corner
 - [ ] Add loading spinners
 - [ ] Add error handling to forms
-- [ ] Add custom themes for user to pick from
 - [ ] Clean up codebase

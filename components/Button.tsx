@@ -36,6 +36,7 @@ export default function Button({
 		<button
 			className={`group relative inline-block text-sm font-medium text-black focus:outline-none focus:ring ${className}`}
 			type="button"
+			disabled={showcase}
 			{...props}
 		>
 			<span
