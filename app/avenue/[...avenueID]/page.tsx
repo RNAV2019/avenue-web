@@ -1,40 +1,69 @@
+'use client';
 import LinkList from '@/components/LinkList';
-import { Avenue } from '@/lib/helper';
+import Loading from '@/components/Loading';
+import { AvenueType } from '@/lib/helper';
 import { Outfit } from 'next/font/google';
 import Image from 'next/image';
 import { QRCodeSVG } from 'qrcode.react';
+import { useEffect, useState } from 'react';
 
 const outfit = Outfit({ subsets: ['latin'] });
-const baseUrl = process.env.VERCEL_URL
-	? `https://${process.env.VERCEL_URL}`
-	: process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
-export default async function avenue({ params }: { params: Promise<{ avenueID: string }> }) {
-	const avenueID = (await params).avenueID[0];
-	const res = await fetch(`${baseUrl}/api/getAvenue?avenueID=${avenueID}`, {
-		cache: 'no-store'
-	});
-	console.log(res.status);
-	console.log(res.statusText);
-	const avenueData = await res.json();
-	const avenue = avenueData as Avenue;
-	if (!avenueData) {
+export default function Avenue({ params }: { params: { avenueID: string[] } }) {
+	const [avenue, setAvenue] = useState<AvenueType | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const avenueID = params.avenueID[0];
+	const qrcodeURL = `${process.env.NEXT_PUBLIC_WEBSITE_URL}/avenue/${avenueID}`;
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				// Fetch avenue data
+				const res = await fetch(`/api/getAvenue?avenueID=${avenueID}`, {
+					cache: 'no-store'
+				});
+
+				if (!res.ok) {
+					throw new Error('Failed to fetch avenue data');
+				}
+
+				const avenueData = await res.json();
+				setAvenue(avenueData);
+
+				// Create statistic
+				await fetch(`/api/createStatistic`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						avenueID: avenueID
+					})
+				});
+			} catch (err) {
+				setError(err instanceof Error ? err.message : 'An error occurred');
+			}
+		};
+
+		fetchData();
+	}, [avenueID]); // Only run when avenueID changes
+
+	if (error) {
 		return (
 			<div>
-				<h1>Error no avenue found</h1>
+				<h1>Error: {error}</h1>
 			</div>
 		);
 	}
-	const statisticRes = await fetch(`${baseUrl}/api/createStatistic`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			avenueID: avenueID
-		})
-	});
-	const qrcodeURL = `${process.env.WEBSITE_URL}/avenue/${avenueID}`;
+
+	if (!avenue) {
+		return (
+			<div className="flex h-screen w-full flex-col items-center justify-center">
+				<Loading loading={!avenue} />
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<nav className="flex flex-col items-center justify-between gap-3 px-4 pt-6 md:flex-row md:px-14">

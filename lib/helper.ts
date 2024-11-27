@@ -8,7 +8,7 @@ export interface AvenueUser {
 	profile_image: string | null;
 }
 
-export interface Avenue {
+export interface AvenueType {
 	id: string;
 	created_at: string;
 	updated_at: string;
