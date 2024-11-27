@@ -14,6 +14,8 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 	const res = await fetch(`${baseUrl}/api/getAvenue?avenueID=${avenueID}`, {
 		cache: 'no-store'
 	});
+	console.log(res.status);
+	console.log(res.statusText);
 	const avenueData = await res.json();
 	const avenue = avenueData as Avenue;
 	if (!avenueData) {
