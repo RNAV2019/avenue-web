@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { QRCodeSVG } from 'qrcode.react';
 
 const outfit = Outfit({ subsets: ['latin'] });
+const baseUrl = process.env.VERCEL_URL
+	? `https://${process.env.VERCEL_URL}`
+	: process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
 export default async function avenue({ params }: { params: Promise<{ avenueID: string }> }) {
 	const avenueID = (await params).avenueID[0];
-	const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/getAvenue?avenueID=${avenueID}`, {
+	const res = await fetch(`${baseUrl}/api/getAvenue?avenueID=${avenueID}`, {
 		cache: 'no-store'
 	});
 	const avenueData = await res.json();
@@ -20,7 +23,7 @@ export default async function avenue({ params }: { params: Promise<{ avenueID: s
 			</div>
 		);
 	}
-	const statisticRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/createStatistic`, {
+	const statisticRes = await fetch(`${baseUrl}/api/createStatistic`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
