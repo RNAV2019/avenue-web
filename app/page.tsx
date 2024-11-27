@@ -28,8 +28,8 @@ export default function Home() {
 	);
 
 	useEffect(() => {
-		const avenueClicks = Math.floor(Math.random() * 400);
-		const numberOfLinks = Math.floor(Math.random() * 15);
+		const avenueClicks = Math.floor(Math.random() * 400) + 1;
+		const numberOfLinks = Math.floor(Math.random() * 15) + 1;
 		const randomClicks = Array.from({ length: 8 }, () => Math.floor(Math.random() * 100));
 		setRandomNumber([avenueClicks, numberOfLinks, ...randomClicks]);
 		const handleResize = () => setWindowWidth(window.innerWidth);

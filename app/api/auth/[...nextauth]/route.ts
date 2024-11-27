@@ -1,4 +1,3 @@
-'use server';
 import { neon } from '@neondatabase/serverless';
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -30,7 +29,6 @@ const authOptions: AuthOptions = {
 						image: user.profile_image
 					};
 				} catch (error) {
-					console.log('Authentication error:', error);
 					return null;
 				}
 			}

@@ -7,6 +7,7 @@ import LinkItem from './LinkItem';
 import { useSession } from 'next-auth/react';
 import EditLinkModal from './EditLinkModal';
 import DeleteLinkModal from './DeleteLinkModal';
+import Loading from './Loading';
 
 interface LinkList {
 	avenueID: string;
@@ -28,7 +29,6 @@ export default function LinkList({ avenueID }: LinkList) {
 				setIsOwner(data.isOwner);
 				if (data.links.length > 0) {
 					setLinks(data.links);
-					console.log(`data: ${!data}`);
 				}
 				setLoading(false);
 				return;
@@ -42,7 +42,6 @@ export default function LinkList({ avenueID }: LinkList) {
 		const data: LinkWithOwner = await res.json();
 		if (data.links.length > 0) {
 			setLinks(data.links);
-			console.log(`data: ${!data}`);
 		} else {
 			setLinks([]);
 			return;
@@ -58,9 +57,7 @@ export default function LinkList({ avenueID }: LinkList) {
 							key={link.url}
 							className="relative flex flex-row items-center justify-end px-10 py-2"
 						>
-							{session && isOwner && (
-								<DeleteLinkModal updateLinks={updateLinks} link_id={link.id} />
-							)}
+							{session && isOwner && <DeleteLinkModal onDelete={updateLinks} link_id={link.id} />}
 							<LinkItem isOwner={isOwner} link={link} />
 							{session && isOwner && <EditLinkModal linkData={link} updateLinks={updateLinks} />}
 						</li>
@@ -68,7 +65,7 @@ export default function LinkList({ avenueID }: LinkList) {
 				</ul>
 			)}
 			{!loading && links.length === 0 && <p>No links found</p>}
-			{loading && <div>Loading...</div>}
+			{loading && <Loading loading={loading} />}
 			{session && isOwner && <CreateLinkModal updateLinks={updateLinks} />}
 		</div>
 	);

@@ -2,6 +2,7 @@
 import Button from '@/components/Button';
 import ClicksChart from '@/components/ClicksChart';
 import DescriptionModal from '@/components/DescriptionModal';
+import Loading from '@/components/Loading';
 import ProfileIconModal from '@/components/ProfileIconModal';
 import { DashboardInfo } from '@/lib/helper';
 import { PaperClipIcon } from '@/lib/icons/PaperClipIcon';
@@ -39,7 +40,6 @@ export default function Dashboard() {
 	}, [router]);
 
 	const handleUpdateUserImage = (imageURL: string) => {
-		console.log(`imageurl = ${imageURL}`);
 		update({
 			...session,
 			user: {
@@ -54,7 +54,6 @@ export default function Dashboard() {
 			await navigator.clipboard.writeText(
 				`${window.location.origin}/avenue/${dashboardInfo?.avenueID}`
 			);
-			console.log('Link copied to clipboard');
 		} catch (error) {
 			console.error(error);
 		}
@@ -141,7 +140,7 @@ export default function Dashboard() {
 							<div className="grainy flex flex-1 items-center justify-between gap-4 border-2 border-black bg-rose-500 p-4 shadow-brutal md:p-6">
 								<div>
 									<p className="text-2xl font-bold lg:text-3xl">
-										{loading ? 'Loading' : dashboardInfo?.aggregateClicks}
+										{loading ? <Loading loading={loading} /> : dashboardInfo?.aggregateClicks}
 									</p>
 
 									<p className="text-sm font-medium">Total Avenue Clicks</p>
@@ -151,7 +150,7 @@ export default function Dashboard() {
 							<div className="grainy flex flex-1 items-center justify-between gap-4 border-2 border-black bg-rose-500 p-4 shadow-brutal md:p-6">
 								<div>
 									<p className="text-2xl font-bold lg:text-3xl">
-										{loading ? 'Loading' : dashboardInfo?.linksRes}
+										{loading ? <Loading loading={loading} /> : dashboardInfo?.linksRes}
 									</p>
 
 									<p className="text-sm font-medium">Number of links</p>
@@ -162,7 +161,7 @@ export default function Dashboard() {
 						<section>
 							<div className="grainy border-2 border-black bg-indigo-500 p-4 shadow-brutal md:p-6">
 								<div className="flex h-[250px] items-center justify-center md:h-[350px]">
-									{!dashboardInfo?.chartData && <p>Loading...</p>}
+									{loading && <Loading loading={loading} />}
 									{dashboardInfo?.chartData && (
 										<ClicksChart chartData={dashboardInfo?.chartData} windowWidth={windowWidth} />
 									)}

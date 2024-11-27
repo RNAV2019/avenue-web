@@ -15,12 +15,31 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [link, setLink] = useState(linkData.url);
 	const [name, setName] = useState(linkData.name);
+	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
-	const handleOpen = () => setIsOpen(true);
-	const handleClose = () => setIsOpen(false);
+	const handleOpen = () => {
+		setIsOpen(true);
+		setError('');
+	};
+
+	const handleClose = () => {
+		setIsOpen(false);
+		setError('');
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (link.length > 0 && name.length > 0) {
+		setError('');
+		setIsLoading(true);
+
+		if (!link || !name) {
+			setError('Please fill in all fields');
+			setIsLoading(false);
+			return;
+		}
+
+		try {
 			const res = await fetch('/api/updateLink', {
 				method: 'POST',
 				headers: {
@@ -32,16 +51,18 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 					id: linkData.id
 				})
 			});
+
 			if (res.ok) {
-				console.log('Link updated successfully');
 				updateLinks();
 				handleClose();
 			} else {
-				console.error('Failed to update link');
+				const data = await res.json();
+				setError(data.message || 'Failed to update link');
 			}
-		} else {
-			console.error('Invalid link');
-			handleClose();
+		} catch (err) {
+			setError('An unexpected error occurred. Please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -69,6 +90,11 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 						onSubmit={handleSubmit}
 					>
 						<h3 className="mb-2 text-xl font-medium text-white">Edit link</h3>
+						{error && (
+							<div className="w-full rounded-md border-2 border-black bg-red-100 p-3 text-sm font-medium text-red-600 shadow-calm">
+								{error}
+							</div>
+						)}
 						<Input
 							type="text"
 							id="link"
@@ -78,6 +104,7 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 							className="text-black placeholder:text-black"
 							value={link}
 							onChange={(e) => setLink(e.target.value)}
+							disabled={isLoading}
 						/>
 						<Input
 							type="text"
@@ -88,10 +115,16 @@ export default function EditLinkModal({ updateLinks, linkData }: LinkProps) {
 							className="text-black placeholder:text-black"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
+							disabled={isLoading}
 						/>
 						<div className="flex flex-row gap-8">
-							<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
-								Edit
+							<Button
+								className="h-10 w-32 text-xs"
+								colour={'bg-red-500'}
+								type="submit"
+								disabled={isLoading}
+							>
+								{isLoading ? 'Updating...' : 'Edit'}
 							</Button>
 							<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={handleClose}>
 								Close

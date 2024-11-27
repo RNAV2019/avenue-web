@@ -14,7 +14,6 @@ export async function GET(req: Request) {
 		await sql`SELECT id, name, profile_image FROM users WHERE email = ${email}`
 	)[0] as AvenueUser;
 	const defaultDescription: string = 'Enter a description';
-	console.log(`user: ${user}`);
 	// Check if user has an avenue
 	const avenue = (await sql`SELECT id FROM avenues WHERE user_id = ${user.id}`)[0];
 	if (!avenue) {
@@ -24,7 +23,6 @@ export async function GET(req: Request) {
 		return new Response(JSON.stringify({ avenueID: newAvenueID }), { status: 200 });
 	} else {
 		const avenueID = avenue['id'];
-		console.log(`avenueID: ${avenueID}`);
 		return new Response(JSON.stringify({ avenueID: avenueID }), { status: 200 });
 	}
 }

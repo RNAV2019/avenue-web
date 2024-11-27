@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 	const sql = neon(process.env.DATABASE_URL || '');
 	const res =
 		await sql`SELECT description FROM avenues WHERE user_id = (SELECT id FROM users WHERE email = ${email})`;
-	const description = res[0]['description'];
+	const description = res[0]['description'] ?? '';
 	if (res) {
 		return NextResponse.json({ description: description, status: 200 });
 	} else {

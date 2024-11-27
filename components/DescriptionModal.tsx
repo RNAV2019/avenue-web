@@ -5,29 +5,42 @@ import Input from './Input';
 
 interface DescriptionProps {
 	isOpen: boolean;
-	onClose: () => void;
+	onClose?: () => void;
 }
-
-type DescriptionResponse = {
-	description: string;
-};
 
 export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) {
 	const [description, setDescription] = useState('');
+	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		fetch('/api/getDescription')
-			.then((res) => res.json())
-			.then((data: DescriptionResponse) => {
-				console.log(data);
+		async function fetchDescription() {
+			try {
+				const res = await fetch('/api/getDescription');
+				const data = await res.json();
 				setDescription(data.description);
-			});
-	}, []);
-	if (!isOpen) return null;
+			} catch (err) {
+				setError('Failed to load description');
+			}
+		}
+
+		if (isOpen) {
+			fetchDescription();
+		}
+	}, [isOpen]);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (description) {
+		setError('');
+		setIsLoading(true);
+
+		if (!description) {
+			setError('Please enter a description');
+			setIsLoading(false);
+			return;
+		}
+
+		try {
 			const res = await fetch('/api/updateAvenueDescription', {
 				method: 'POST',
 				headers: {
@@ -37,16 +50,20 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 					description: description
 				})
 			});
+
 			if (res.ok) {
-				onClose();
+				onClose?.();
 			} else {
-				console.error('Failed to update description');
+				const data = await res.json();
+				setError(data.message || 'Failed to update description');
 			}
-		} else {
-			console.error('Invalid description');
-			onClose();
+		} catch (err) {
+			setError('An unexpected error occurred. Please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
+	if (!isOpen) return null;
 	return (
 		<div
 			className="fixed -top-10 left-0 z-50 h-full w-full bg-black bg-opacity-80"
@@ -71,10 +88,16 @@ export default function DescriptionModal({ isOpen, onClose }: DescriptionProps) 
 						className="text-black placeholder:text-black"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
+						disabled={isLoading}
 					/>
 					<div className="flex flex-row gap-8">
-						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
-							Update
+						<Button
+							className="h-10 w-32 text-xs"
+							colour={'bg-red-500'}
+							type="submit"
+							disabled={isLoading}
+						>
+							{isLoading ? 'Updating...' : 'Update'}
 						</Button>
 						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>
 							Close

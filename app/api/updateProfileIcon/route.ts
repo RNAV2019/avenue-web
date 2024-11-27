@@ -16,7 +16,14 @@ export async function POST(req: Request) {
 		return NextResponse.json({ status: 'error', message: 'Image URL is invalid' });
 	}
 	const sql = neon(process.env.DATABASE_URL ?? '');
-	const result = await sql`UPDATE users SET profile_image = ${imageURL} WHERE email = ${email}`;
+	const result = await sql`
+		WITH updated_user AS (
+			UPDATE users SET profile_image = ${imageURL} WHERE email = ${email}
+			RETURNING id
+		)
+		UPDATE avenues SET profile_image = ${imageURL}
+		WHERE user_id = (SELECT id FROM updated_user);
+	`;
 	if (result) {
 		return NextResponse.json({ status: 'success', message: 'Image URL updated successfully' });
 	} else {

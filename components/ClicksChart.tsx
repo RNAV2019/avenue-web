@@ -71,7 +71,13 @@ export default function ClicksChart({
 			},
 			y: {
 				ticks: {
-					color: 'white'
+					color: 'white',
+					stepSize: 1,
+					callback: function (value) {
+						if (Math.floor(Number(value)) === Number(value)) {
+							return value;
+						}
+					}
 				}
 			}
 		},

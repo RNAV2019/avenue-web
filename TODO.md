@@ -8,7 +8,7 @@
 - [x] Create graph to track clicks
 - [x] Make all pages responsive / mobile-friendly
 - [x] Add example avenue section to landing page
-- [ ] Add a QRCode to avenue in bottom left corner
-- [ ] Add loading spinners
-- [ ] Add error handling to forms
-- [ ] Clean up codebase
+- [x] Add a QRCode to avenue in bottom right corner
+- [x] Add loading spinners
+- [x] Add error handling to forms
+- [x] Clean up codebase

@@ -24,8 +24,30 @@ export default function ProfileIconModal({
 }: ProfileIconModalProps) {
 	const [imageURL, setImageURL] = useState(defaultImage ?? '');
 	const [isValidImage, setIsValidImage] = useState(false);
+	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+
 	const validateImageURL = async () => {
+		setError('');
+		setIsLoading(true);
+
 		try {
+			const urlPattern = new RegExp(
+				'^(https?:\\/\\/)?' +
+					'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+					'((\\d{1,3}\\.){3}\\d{1,3}))' +
+					'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+					'(\\?[;&a-z\\d%_.~+=-]*)?' +
+					'(\\#[-a-z\\d_]*)?$',
+				'i'
+			);
+
+			if (!urlPattern.test(imageURL)) {
+				setError('Please enter a valid URL');
+				setIsValidImage(false);
+				return;
+			}
+
 			const res = await fetch('/api/validateImage', {
 				method: 'POST',
 				headers: {
@@ -35,10 +57,17 @@ export default function ProfileIconModal({
 					imageURL: imageURL
 				})
 			});
-			const data: ImageValidity = await res.json();
+
+			const data = await res.json();
 			setIsValidImage(data.valid);
+			if (!data.valid) {
+				setError('Please enter a valid image URL');
+			}
 		} catch (error) {
+			setError('Failed to validate image URL');
 			setIsValidImage(false);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 	useEffect(() => {
@@ -53,25 +82,42 @@ export default function ProfileIconModal({
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		validateImageURL();
-		if (isValidImage) {
-			const res = await fetch('/api/updateProfileIcon', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					imageURL: imageURL,
-					email: email
-				})
-			});
-			if (res.ok) {
-				onUpdateUserImage(imageURL);
-				onClose();
+		setError('');
+		setIsLoading(true);
+
+		if (!imageURL) {
+			setError('Please enter an image URL');
+			setIsLoading(false);
+			return;
+		}
+
+		try {
+			await validateImageURL();
+
+			if (isValidImage) {
+				const res = await fetch('/api/updateProfileIcon', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						imageURL: imageURL,
+						email: email
+					})
+				});
+
+				if (res.ok) {
+					onUpdateUserImage(imageURL);
+					onClose();
+				} else {
+					const data = await res.json();
+					setError(data.message || 'Failed to update profile icon');
+				}
 			}
-		} else {
-			console.error('Invalid image URL');
-			onClose();
+		} catch (err) {
+			setError('An unexpected error occurred. Please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -121,10 +167,16 @@ export default function ProfileIconModal({
 						autoComplete="off"
 						className="text-black placeholder:text-black"
 						onChange={(e) => setImageURL(e.target.value)}
+						disabled={isLoading}
 					/>
 					<div className="flex flex-row gap-8">
-						<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
-							Update Profile
+						<Button
+							className="h-10 w-32 text-xs"
+							colour={'bg-red-500'}
+							type="submit"
+							disabled={isLoading}
+						>
+							{isLoading ? 'Updating...' : 'Update Profile'}
 						</Button>
 						<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={onClose}>
 							Close

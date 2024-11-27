@@ -12,12 +12,31 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [link, setLink] = useState('');
 	const [name, setName] = useState('');
+	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
-	const handleOpen = () => setIsOpen(true);
-	const handleClose = () => setIsOpen(false);
+	const handleOpen = () => {
+		setIsOpen(true);
+		setError('');
+	};
+
+	const handleClose = () => {
+		setIsOpen(false);
+		setError('');
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (link.length > 0 && name.length > 0) {
+		setError('');
+		setIsLoading(true);
+
+		if (!link || !name) {
+			setError('Please fill in all fields');
+			setIsLoading(false);
+			return;
+		}
+
+		try {
 			const res = await fetch('/api/createLink', {
 				method: 'POST',
 				headers: {
@@ -28,15 +47,18 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 					name: name
 				})
 			});
+
 			if (res.ok) {
 				updateLinks();
 				handleClose();
 			} else {
-				console.error('Failed to create link');
+				const data = await res.json();
+				setError(data.message || 'Failed to create link');
 			}
-		} else {
-			console.error('Invalid link');
-			handleClose();
+		} catch (err) {
+			setError('An unexpected error occurred. Please try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -71,6 +93,7 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 							className="text-black placeholder:text-black"
 							value={link}
 							onChange={(e) => setLink(e.target.value)}
+							disabled={isLoading}
 						/>
 						<Input
 							type="text"
@@ -81,10 +104,16 @@ export default function CreateLinkModal({ updateLinks }: LinkProps) {
 							className="text-black placeholder:text-black"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
+							disabled={isLoading}
 						/>
 						<div className="flex flex-row gap-8">
-							<Button className="h-10 w-32 text-xs" colour={'bg-red-500'} type="submit">
-								Create
+							<Button
+								className="h-10 w-32 text-xs"
+								colour={'bg-red-500'}
+								type="submit"
+								disabled={isLoading}
+							>
+								{isLoading ? 'Updating...' : 'Create'}
 							</Button>
 							<Button className="h-10 w-32 text-xs" colour={'bg-indigo-500'} onClick={handleClose}>
 								Close
